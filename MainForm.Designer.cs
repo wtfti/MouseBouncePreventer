@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             mouseEventPrinter = new System.Windows.Forms.ListBox();
             this.hookInvokerButton = new System.Windows.Forms.Button();
             this.clearMouseEventPrinterButton = new System.Windows.Forms.Button();
-            this.countBypassedClicksLabel = new System.Windows.Forms.Label();
+            countBypassedClicksLabel = new System.Windows.Forms.Label();
+            this.resetStopWatchTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // mouseEventPrinter
@@ -64,19 +66,24 @@
             // 
             // countBypassedClicksLabel
             // 
-            this.countBypassedClicksLabel.AutoSize = true;
-            this.countBypassedClicksLabel.Location = new System.Drawing.Point(12, 54);
-            this.countBypassedClicksLabel.Name = "countBypassedClicksLabel";
-            this.countBypassedClicksLabel.Size = new System.Drawing.Size(35, 13);
-            this.countBypassedClicksLabel.TabIndex = 6;
-            this.countBypassedClicksLabel.Text = "Bypassed clicks: NaN";
+            countBypassedClicksLabel.AutoSize = true;
+            countBypassedClicksLabel.Location = new System.Drawing.Point(12, 54);
+            countBypassedClicksLabel.Name = "countBypassedClicksLabel";
+            countBypassedClicksLabel.Size = new System.Drawing.Size(111, 13);
+            countBypassedClicksLabel.TabIndex = 6;
+            countBypassedClicksLabel.Text = "Bypassed clicks: NaN";
+            // 
+            // resetStopWatchTimer
+            // 
+            this.resetStopWatchTimer.Interval = 28000;
+            this.resetStopWatchTimer.Tick += new System.EventHandler(this.resetStopWatchTimer_Tick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(390, 410);
-            this.Controls.Add(this.countBypassedClicksLabel);
+            this.Controls.Add(countBypassedClicksLabel);
             this.Controls.Add(this.clearMouseEventPrinterButton);
             this.Controls.Add(this.hookInvokerButton);
             this.Controls.Add(mouseEventPrinter);
@@ -92,8 +99,9 @@
 
         private System.Windows.Forms.Button hookInvokerButton;
         private System.Windows.Forms.Button clearMouseEventPrinterButton;
-        private System.Windows.Forms.Label countBypassedClicksLabel;
+        private static System.Windows.Forms.Label countBypassedClicksLabel;
         private static System.Windows.Forms.ListBox mouseEventPrinter;
+        private System.Windows.Forms.Timer resetStopWatchTimer;
     }
 }
 

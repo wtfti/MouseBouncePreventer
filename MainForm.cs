@@ -9,7 +9,7 @@
 
     public partial class MainForm : Form
     {
-        private const long DifferenceBetweenEachClick = 1500000;
+        private const long DifferenceTicksBetweenEachClick = 900000;
 
         //Declare the hook handle as an int.
         private static int hHook = 0;
@@ -18,7 +18,10 @@
 
         private static long LastEllapsedTime = 0;
 
-        private static long bypassedClicks = 0;
+        // @CallbackOnCollectedDelegate without reference, garbage collector will throw an exception
+        private static readonly LowLevelMouseProc Proc = MouseHookCallBack;
+
+        private long MaxAllowedMilisecondsForStopwatch = 30000;
 
         //Declare the mouse hook constant.
         //For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK.
@@ -55,14 +58,14 @@
             if (mouseEvent == MouseMessages.WM_LBUTTONDOWN)
             {
                 long currentTime = Stopwatch.Elapsed.Ticks;
-                if (LastEllapsedTime != 0)
+                if (LastEllapsedTime > 0)
                 {
                     long timeDifference = currentTime - LastEllapsedTime;
-                    if (timeDifference < DifferenceBetweenEachClick)
+                    if (timeDifference < DifferenceTicksBetweenEachClick)
                     {
                         LastEllapsedTime = currentTime;
-                        bypassedClicks++;
                         mouseEventPrinter.Items.Add($"{mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
+                        countBypassedClicksLabel.Text = $@"Bypassed clicks: {mouseEventPrinter.Items.Count}";
                         return (IntPtr) 1;
                     }
                 }
@@ -77,7 +80,7 @@
         {
             if (hHook == 0)
             {
-                hHook = SetWindowsHookEx(WH_MOUSE_LL, MouseHookCallBack, (IntPtr)0, 0);
+                hHook = SetWindowsHookEx(WH_MOUSE_LL, Proc, (IntPtr)0, 0);
 
                 if (hHook == 0)
                 {
@@ -85,7 +88,7 @@
                 }
                 
                 Stopwatch.Start();
-                this.countBypassedClicksLabel.Text = $@"Bypassed clicks: {bypassedClicks}";
+                this.resetStopWatchTimer.Start();
                 this.hookInvokerButton.Text = @"UnHook!";
             }
             else
@@ -98,6 +101,8 @@
                 }
 
                 hHook = 0;
+                Stopwatch.Stop();
+                this.resetStopWatchTimer.Stop();
                 mouseEventPrinter.Items.Add("Unhook successfully");
                 this.hookInvokerButton.Text = @"HOOK!";
             }
@@ -116,25 +121,19 @@
             }
         }
 
-        private enum MouseMessages
-        {
-            WM_LBUTTONDOWN = 0x0201,
-
-            WM_LBUTTONUP = 0x0202,
-
-            WM_MOUSEMOVE = 0x0200,
-
-            WM_MOUSEWHEEL = 0x020A,
-
-            WM_RBUTTONDOWN = 0x0204,
-
-            WM_RBUTTONUP = 0x0205
-
-        }
-
         private void clearMouseEventPrinterButton_Click(object sender, EventArgs e)
         {
             mouseEventPrinter.Items.Clear();
+            countBypassedClicksLabel.Text = @"Bypassed clicks: NaN";
+        }
+
+        private void resetStopWatchTimer_Tick(object sender, EventArgs e)
+        {
+            if (Stopwatch.ElapsedMilliseconds > this.MaxAllowedMilisecondsForStopwatch)
+            {
+                LastEllapsedTime = 0;
+                Stopwatch.Reset();
+            }
         }
     }
 }
