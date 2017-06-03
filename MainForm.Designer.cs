@@ -39,9 +39,9 @@
             // mouseEventPrinter
             // 
             mouseEventPrinter.FormattingEnabled = true;
-            mouseEventPrinter.Location = new System.Drawing.Point(12, 80);
+            mouseEventPrinter.Location = new System.Drawing.Point(15, 82);
             mouseEventPrinter.Name = "mouseEventPrinter";
-            mouseEventPrinter.Size = new System.Drawing.Size(365, 316);
+            mouseEventPrinter.Size = new System.Drawing.Size(483, 316);
             mouseEventPrinter.TabIndex = 0;
             // 
             // hookInvokerButton
@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(390, 410);
+            this.ClientSize = new System.Drawing.Size(510, 410);
             this.Controls.Add(countBypassedClicksLabel);
             this.Controls.Add(this.clearMouseEventPrinterButton);
             this.Controls.Add(this.hookInvokerButton);
@@ -99,9 +99,9 @@
 
         private System.Windows.Forms.Button hookInvokerButton;
         private System.Windows.Forms.Button clearMouseEventPrinterButton;
+        private System.Windows.Forms.Timer resetStopWatchTimer;
         private static System.Windows.Forms.Label countBypassedClicksLabel;
         private static System.Windows.Forms.ListBox mouseEventPrinter;
-        private System.Windows.Forms.Timer resetStopWatchTimer;
     }
 }
 

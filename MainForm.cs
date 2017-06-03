@@ -9,7 +9,7 @@
 
     public partial class MainForm : Form
     {
-        private const long DifferenceTicksBetweenEachClick = 900000;
+        private const long DifferenceTicksBetweenEachClick = 1500000;
 
         //Declare the hook handle as an int.
         private static int hHook = 0;
@@ -64,12 +64,12 @@
                     if (timeDifference < DifferenceTicksBetweenEachClick)
                     {
                         LastEllapsedTime = currentTime;
-                        mouseEventPrinter.Items.Add($"{mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
+                        mouseEventPrinter.Items.Add($"BYPASSED => {mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
                         countBypassedClicksLabel.Text = $@"Bypassed clicks: {mouseEventPrinter.Items.Count}";
                         return (IntPtr) 1;
                     }
                 }
-            
+                mouseEventPrinter.Items.Add($"{mouseEvent}  -   {currentTime}   -   {LastEllapsedTime}  -  {DateTime.Now}");
                 LastEllapsedTime = currentTime;
             }
             
@@ -132,7 +132,7 @@
             if (Stopwatch.ElapsedMilliseconds > this.MaxAllowedMilisecondsForStopwatch)
             {
                 LastEllapsedTime = 0;
-                Stopwatch.Reset();
+                Stopwatch.Restart();
             }
         }
     }
