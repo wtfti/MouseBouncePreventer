@@ -18,14 +18,14 @@
 
         private static long LastEllapsedTime = 0;
 
-        private static long bypassedLButtonClicks = 0;
+        private static long BypassedLButtonClicks = 0;
 
-        private static long lButtonClicks = 0;
+        private static long LButtonClicks = 0;
 
         // @CallbackOnCollectedDelegate without reference, garbage collector will throw an exception
         private static readonly LowLevelMouseProc Proc = MouseHookCallBack;
 
-        private long MaxAllowedMilisecondsForStopwatch = 30000;
+        private long maxAllowedMilisecondsForStopwatch = 30000;
 
         //Declare the mouse hook constant.
         //For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK.
@@ -69,16 +69,27 @@
                     {
                         LastEllapsedTime = currentTime;
                         mouseEventPrinter.Items.Add($"BYPASSED => {mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
-                        bypassedLButtonLabel.Text = $@"Bypassed clicks: {++bypassedLButtonClicks}";
+                        bypassedLButtonLabel.Text = $@"Bypassed clicks: {++BypassedLButtonClicks}";
                         allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
+
+                        if (scrollBottomCheckBox.Checked)
+                        {
+                            ScrollToBottomListBox();
+                        }
+
                         return (IntPtr)1;
                     }
                 }
 
                 mouseEventPrinter.Items.Add($"{mouseEvent}  -   {currentTime}   -   {LastEllapsedTime}  -  {DateTime.Now}");
-                lButtonLabel.Text = $@"LButton: {++lButtonClicks}";
+                lButtonLabel.Text = $@"LButton: {++LButtonClicks}";
                 allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
                 LastEllapsedTime = currentTime;
+
+                if (scrollBottomCheckBox.Checked)
+                {
+                    ScrollToBottomListBox();
+                }
             }
 
             return (IntPtr)CallNextHookEx(hHook, nCode, wParam, lParam);
@@ -137,16 +148,17 @@
 
         private void resetStopWatchTimer_Tick(object sender, EventArgs e)
         {
-            if (Stopwatch.ElapsedMilliseconds > this.MaxAllowedMilisecondsForStopwatch)
+            if (Stopwatch.ElapsedMilliseconds > this.maxAllowedMilisecondsForStopwatch)
             {
                 LastEllapsedTime = 0;
                 Stopwatch.Restart();
             }
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private static void ScrollToBottomListBox()
         {
-
+            int visibleItems = mouseEventPrinter.ClientSize.Height / mouseEventPrinter.ItemHeight;
+            mouseEventPrinter.TopIndex = Math.Max(mouseEventPrinter.Items.Count - visibleItems + 1, 0);
         }
     }
 }

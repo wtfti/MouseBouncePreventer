@@ -36,12 +36,15 @@
             lButtonLabel = new System.Windows.Forms.Label();
             allLButtonLabel = new System.Windows.Forms.Label();
             this.resetStopWatchTimer = new System.Windows.Forms.Timer(this.components);
+            this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            scrollBottomCheckBox = new System.Windows.Forms.CheckBox();
+            this.settingsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // mouseEventPrinter
             // 
             mouseEventPrinter.FormattingEnabled = true;
-            mouseEventPrinter.Location = new System.Drawing.Point(12, 149);
+            mouseEventPrinter.Location = new System.Drawing.Point(12, 170);
             mouseEventPrinter.Name = "mouseEventPrinter";
             mouseEventPrinter.Size = new System.Drawing.Size(483, 316);
             mouseEventPrinter.TabIndex = 0;
@@ -69,7 +72,7 @@
             // bypassedLButtonLabel
             // 
             bypassedLButtonLabel.AutoSize = true;
-            bypassedLButtonLabel.Location = new System.Drawing.Point(12, 82);
+            bypassedLButtonLabel.Location = new System.Drawing.Point(6, 51);
             bypassedLButtonLabel.Name = "bypassedLButtonLabel";
             bypassedLButtonLabel.Size = new System.Drawing.Size(121, 13);
             bypassedLButtonLabel.TabIndex = 6;
@@ -78,7 +81,7 @@
             // lButtonLabel
             // 
             lButtonLabel.AutoSize = true;
-            lButtonLabel.Location = new System.Drawing.Point(12, 54);
+            lButtonLabel.Location = new System.Drawing.Point(6, 25);
             lButtonLabel.Name = "lButtonLabel";
             lButtonLabel.Size = new System.Drawing.Size(72, 13);
             lButtonLabel.TabIndex = 6;
@@ -87,7 +90,7 @@
             // allLButtonLabel
             // 
             allLButtonLabel.AutoSize = true;
-            allLButtonLabel.Location = new System.Drawing.Point(12, 110);
+            allLButtonLabel.Location = new System.Drawing.Point(6, 79);
             allLButtonLabel.Name = "allLButtonLabel";
             allLButtonLabel.Size = new System.Drawing.Size(86, 13);
             allLButtonLabel.TabIndex = 6;
@@ -98,23 +101,44 @@
             this.resetStopWatchTimer.Interval = 28000;
             this.resetStopWatchTimer.Tick += new System.EventHandler(this.resetStopWatchTimer_Tick);
             // 
+            // settingsGroupBox
+            // 
+            this.settingsGroupBox.Controls.Add(scrollBottomCheckBox);
+            this.settingsGroupBox.Controls.Add(lButtonLabel);
+            this.settingsGroupBox.Controls.Add(allLButtonLabel);
+            this.settingsGroupBox.Controls.Add(bypassedLButtonLabel);
+            this.settingsGroupBox.Location = new System.Drawing.Point(12, 54);
+            this.settingsGroupBox.Name = "settingsGroupBox";
+            this.settingsGroupBox.Size = new System.Drawing.Size(483, 100);
+            this.settingsGroupBox.TabIndex = 7;
+            this.settingsGroupBox.TabStop = false;
+            this.settingsGroupBox.Text = "Settings";
+            // 
+            // scrollBottomCheckBox
+            // 
+            scrollBottomCheckBox.AutoSize = true;
+            scrollBottomCheckBox.Location = new System.Drawing.Point(152, 25);
+            scrollBottomCheckBox.Name = "scrollBottomCheckBox";
+            scrollBottomCheckBox.Size = new System.Drawing.Size(133, 17);
+            scrollBottomCheckBox.TabIndex = 7;
+            scrollBottomCheckBox.Text = "Always scroll to bottom";
+            scrollBottomCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 499);
-            this.Controls.Add(bypassedLButtonLabel);
-            this.Controls.Add(lButtonLabel);
-            this.Controls.Add(allLButtonLabel);
+            this.ClientSize = new System.Drawing.Size(510, 511);
+            this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(mouseEventPrinter);
             this.Controls.Add(this.clearMouseEventPrinterButton);
             this.Controls.Add(this.hookInvokerButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.settingsGroupBox.ResumeLayout(false);
+            this.settingsGroupBox.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -123,6 +147,8 @@
         private System.Windows.Forms.Button hookInvokerButton;
         private System.Windows.Forms.Button clearMouseEventPrinterButton;
         private System.Windows.Forms.Timer resetStopWatchTimer;
+        private System.Windows.Forms.GroupBox settingsGroupBox;
+        private static System.Windows.Forms.CheckBox scrollBottomCheckBox;
         private static System.Windows.Forms.Label lButtonLabel;
         private static System.Windows.Forms.Label bypassedLButtonLabel;
         private static System.Windows.Forms.Label allLButtonLabel;
