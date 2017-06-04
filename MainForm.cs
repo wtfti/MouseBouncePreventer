@@ -9,7 +9,7 @@
 
     public partial class MainForm : Form
     {
-        private const long DifferenceTicksBetweenEachClick = 1500000;
+        private const long DifferenceTicksBetweenEachClick = 1000000;
 
         //Declare the hook handle as an int.
         private static int hHook = 0;
@@ -17,6 +17,10 @@
         private static readonly Stopwatch Stopwatch = new Stopwatch();
 
         private static long LastEllapsedTime = 0;
+
+        private static long bypassedLButtonClicks = 0;
+
+        private static long lButtonClicks = 0;
 
         // @CallbackOnCollectedDelegate without reference, garbage collector will throw an exception
         private static readonly LowLevelMouseProc Proc = MouseHookCallBack;
@@ -51,10 +55,10 @@
         {
             if (nCode < 0)
             {
-                return (IntPtr) CallNextHookEx(hHook, nCode, wParam, lParam);
+                return (IntPtr)CallNextHookEx(hHook, nCode, wParam, lParam);
             }
-            
-            MouseMessages mouseEvent = (MouseMessages) wParam;
+
+            MouseMessages mouseEvent = (MouseMessages)wParam;
             if (mouseEvent == MouseMessages.WM_LBUTTONDOWN)
             {
                 long currentTime = Stopwatch.Elapsed.Ticks;
@@ -65,15 +69,19 @@
                     {
                         LastEllapsedTime = currentTime;
                         mouseEventPrinter.Items.Add($"BYPASSED => {mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
-                        countBypassedClicksLabel.Text = $@"Bypassed clicks: {mouseEventPrinter.Items.Count}";
-                        return (IntPtr) 1;
+                        bypassedLButtonLabel.Text = $@"Bypassed clicks: {++bypassedLButtonClicks}";
+                        allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
+                        return (IntPtr)1;
                     }
                 }
+
                 mouseEventPrinter.Items.Add($"{mouseEvent}  -   {currentTime}   -   {LastEllapsedTime}  -  {DateTime.Now}");
+                lButtonLabel.Text = $@"LButton: {++lButtonClicks}";
+                allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
                 LastEllapsedTime = currentTime;
             }
-            
-            return (IntPtr) CallNextHookEx(hHook, nCode, wParam, lParam);
+
+            return (IntPtr)CallNextHookEx(hHook, nCode, wParam, lParam);
         }
 
         private void hookInvokerButton_Click(object sender, EventArgs e)
@@ -86,7 +94,7 @@
                 {
                     throw new Exception("SetWindowsHookEx Failed");
                 }
-                
+
                 Stopwatch.Start();
                 this.resetStopWatchTimer.Start();
                 this.hookInvokerButton.Text = @"UnHook!";
@@ -124,7 +132,7 @@
         private void clearMouseEventPrinterButton_Click(object sender, EventArgs e)
         {
             mouseEventPrinter.Items.Clear();
-            countBypassedClicksLabel.Text = @"Bypassed clicks: NaN";
+            bypassedLButtonLabel.Text = @"Bypassed clicks: NaN";
         }
 
         private void resetStopWatchTimer_Tick(object sender, EventArgs e)
@@ -134,6 +142,11 @@
                 LastEllapsedTime = 0;
                 Stopwatch.Restart();
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

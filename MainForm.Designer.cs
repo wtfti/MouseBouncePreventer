@@ -32,14 +32,16 @@
             mouseEventPrinter = new System.Windows.Forms.ListBox();
             this.hookInvokerButton = new System.Windows.Forms.Button();
             this.clearMouseEventPrinterButton = new System.Windows.Forms.Button();
-            countBypassedClicksLabel = new System.Windows.Forms.Label();
+            bypassedLButtonLabel = new System.Windows.Forms.Label();
+            lButtonLabel = new System.Windows.Forms.Label();
+            allLButtonLabel = new System.Windows.Forms.Label();
             this.resetStopWatchTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // mouseEventPrinter
             // 
             mouseEventPrinter.FormattingEnabled = true;
-            mouseEventPrinter.Location = new System.Drawing.Point(15, 82);
+            mouseEventPrinter.Location = new System.Drawing.Point(12, 149);
             mouseEventPrinter.Name = "mouseEventPrinter";
             mouseEventPrinter.Size = new System.Drawing.Size(483, 316);
             mouseEventPrinter.TabIndex = 0;
@@ -64,14 +66,32 @@
             this.clearMouseEventPrinterButton.UseVisualStyleBackColor = true;
             this.clearMouseEventPrinterButton.Click += new System.EventHandler(this.clearMouseEventPrinterButton_Click);
             // 
-            // countBypassedClicksLabel
+            // bypassedLButtonLabel
             // 
-            countBypassedClicksLabel.AutoSize = true;
-            countBypassedClicksLabel.Location = new System.Drawing.Point(12, 54);
-            countBypassedClicksLabel.Name = "countBypassedClicksLabel";
-            countBypassedClicksLabel.Size = new System.Drawing.Size(111, 13);
-            countBypassedClicksLabel.TabIndex = 6;
-            countBypassedClicksLabel.Text = "Bypassed clicks: NaN";
+            bypassedLButtonLabel.AutoSize = true;
+            bypassedLButtonLabel.Location = new System.Drawing.Point(12, 82);
+            bypassedLButtonLabel.Name = "bypassedLButtonLabel";
+            bypassedLButtonLabel.Size = new System.Drawing.Size(121, 13);
+            bypassedLButtonLabel.TabIndex = 6;
+            bypassedLButtonLabel.Text = "Bypassed LButton: NaN";
+            // 
+            // lButtonLabel
+            // 
+            lButtonLabel.AutoSize = true;
+            lButtonLabel.Location = new System.Drawing.Point(12, 54);
+            lButtonLabel.Name = "lButtonLabel";
+            lButtonLabel.Size = new System.Drawing.Size(72, 13);
+            lButtonLabel.TabIndex = 6;
+            lButtonLabel.Text = "LButton: NaN";
+            // 
+            // allLButtonLabel
+            // 
+            allLButtonLabel.AutoSize = true;
+            allLButtonLabel.Location = new System.Drawing.Point(12, 110);
+            allLButtonLabel.Name = "allLButtonLabel";
+            allLButtonLabel.Size = new System.Drawing.Size(86, 13);
+            allLButtonLabel.TabIndex = 6;
+            allLButtonLabel.Text = "All LButton: NaN";
             // 
             // resetStopWatchTimer
             // 
@@ -82,14 +102,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 410);
-            this.Controls.Add(countBypassedClicksLabel);
+            this.ClientSize = new System.Drawing.Size(510, 499);
+            this.Controls.Add(bypassedLButtonLabel);
+            this.Controls.Add(lButtonLabel);
+            this.Controls.Add(allLButtonLabel);
+            this.Controls.Add(mouseEventPrinter);
             this.Controls.Add(this.clearMouseEventPrinterButton);
             this.Controls.Add(this.hookInvokerButton);
-            this.Controls.Add(mouseEventPrinter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -100,7 +123,9 @@
         private System.Windows.Forms.Button hookInvokerButton;
         private System.Windows.Forms.Button clearMouseEventPrinterButton;
         private System.Windows.Forms.Timer resetStopWatchTimer;
-        private static System.Windows.Forms.Label countBypassedClicksLabel;
+        private static System.Windows.Forms.Label lButtonLabel;
+        private static System.Windows.Forms.Label bypassedLButtonLabel;
+        private static System.Windows.Forms.Label allLButtonLabel;
         private static System.Windows.Forms.ListBox mouseEventPrinter;
     }
 }
