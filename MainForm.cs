@@ -9,7 +9,12 @@
 
     public partial class MainForm : Form
     {
+        private const long MaxAllowedMilisecondsForStopwatch = 30000;
+
         private const long DifferenceTicksBetweenEachClick = 1000000;
+
+        //Declare the mouse hook constant.
+        public const int WH_MOUSE_LL = 14;
 
         //Declare the hook handle as an int.
         private static int hHook = 0;
@@ -24,12 +29,6 @@
 
         // @CallbackOnCollectedDelegate without reference, garbage collector will throw an exception
         private static readonly LowLevelMouseProc Proc = MouseHookCallBack;
-
-        private long maxAllowedMilisecondsForStopwatch = 30000;
-
-        //Declare the mouse hook constant.
-        //For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK.
-        public const int WH_MOUSE_LL = 14;
 
         //This is the Import for the SetWindowsHookEx function.
         //Use this function to install a thread-specific hook.
@@ -142,13 +141,18 @@
 
         private void clearMouseEventPrinterButton_Click(object sender, EventArgs e)
         {
+            bypassedLButtonLabel.Text = @"Bypassed LButton: NaN";
+            allLButtonLabel.Text = @"All LButton: NaN";
+            lButtonLabel.Text = @"LButton: NaN";
+            LastEllapsedTime = 0;
+            BypassedLButtonClicks = 0;
+            LButtonClicks = 0;
             mouseEventPrinter.Items.Clear();
-            bypassedLButtonLabel.Text = @"Bypassed clicks: NaN";
         }
 
         private void resetStopWatchTimer_Tick(object sender, EventArgs e)
         {
-            if (Stopwatch.ElapsedMilliseconds > this.maxAllowedMilisecondsForStopwatch)
+            if (Stopwatch.ElapsedMilliseconds > MaxAllowedMilisecondsForStopwatch)
             {
                 LastEllapsedTime = 0;
                 Stopwatch.Restart();
