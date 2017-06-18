@@ -47,6 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IMousePreventer.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Logger.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MouseEvents.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -55,6 +60,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Entry.cs" />
+    <Compile Include="MousePreventer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

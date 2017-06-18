@@ -1,6 +1,6 @@
 ﻿namespace RazerDeathadderFix
 {
-    enum MouseMessages
+    public enum MouseMessages
     {
         WM_LBUTTONDOWN = 0x0201,
         WM_LBUTTONUP = 0x0202,

@@ -1,25 +1,22 @@
 ﻿namespace RazerDeathadderFix
 {
     using System;
+    using System.Drawing;
     using System.Windows.Forms;
     using System.Runtime.InteropServices;
-    using System.Diagnostics;
+    using Interfaces;
 
     public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 
     public partial class MainForm : Form
     {
-        private const long MaxAllowedMilisecondsForStopwatch = 30000;
-
-        private const long DifferenceTicksBetweenEachClick = 1000000;
+        private static readonly IMousePreventer mousePreventer = null;
 
         //Declare the mouse hook constant.
         public const int WH_MOUSE_LL = 14;
 
         //Declare the hook handle as an int.
         private static int hHook = 0;
-
-        private static readonly Stopwatch Stopwatch = new Stopwatch();
 
         private static long LastEllapsedTime = 0;
 
@@ -57,38 +54,11 @@
                 return (IntPtr)CallNextHookEx(hHook, nCode, wParam, lParam);
             }
 
-            MouseMessages mouseEvent = (MouseMessages)wParam;
-            if (mouseEvent == MouseMessages.WM_LBUTTONDOWN)
+            bool prevent = mousePreventer.IsMouseBounce(wParam);
+
+            if (prevent)
             {
-                long currentTime = Stopwatch.Elapsed.Ticks;
-                if (LastEllapsedTime > 0)
-                {
-                    long timeDifference = currentTime - LastEllapsedTime;
-                    if (timeDifference < DifferenceTicksBetweenEachClick)
-                    {
-                        LastEllapsedTime = currentTime;
-                        mouseEventPrinter.Items.Add($"BYPASSED => {mouseEvent}  -  {timeDifference}  -  {DateTime.Now}");
-                        bypassedLButtonLabel.Text = $@"Bypassed clicks: {++BypassedLButtonClicks}";
-                        allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
-
-                        if (scrollBottomCheckBox.Checked)
-                        {
-                            ScrollToBottomListBox();
-                        }
-
-                        return (IntPtr)1;
-                    }
-                }
-
-                mouseEventPrinter.Items.Add($"{mouseEvent}  -   {currentTime}   -   {LastEllapsedTime}  -  {DateTime.Now}");
-                lButtonLabel.Text = $@"LButton: {++LButtonClicks}";
-                allLButtonLabel.Text = $@"All LButton: {mouseEventPrinter.Items.Count}";
-                LastEllapsedTime = currentTime;
-
-                if (scrollBottomCheckBox.Checked)
-                {
-                    ScrollToBottomListBox();
-                }
+                return (IntPtr) 1;
             }
 
             return (IntPtr)CallNextHookEx(hHook, nCode, wParam, lParam);
@@ -96,34 +66,32 @@
 
         private void hookInvokerButton_Click(object sender, EventArgs e)
         {
-            if (hHook == 0)
-            {
-                hHook = SetWindowsHookEx(WH_MOUSE_LL, Proc, (IntPtr)0, 0);
-
-                if (hHook == 0)
-                {
-                    throw new Exception("SetWindowsHookEx Failed");
-                }
-
-                Stopwatch.Start();
-                this.resetStopWatchTimer.Start();
-                this.hookInvokerButton.Text = @"UnHook!";
-            }
-            else
-            {
-                bool ret = UnhookWindowsHookEx(hHook);
-                //If the UnhookWindowsHookEx function fails.
-                if (ret == false)
-                {
-                    throw new Exception("UnhookWindowsHookEx Failed");
-                }
-
-                hHook = 0;
-                Stopwatch.Stop();
-                this.resetStopWatchTimer.Stop();
-                mouseEventPrinter.Items.Add("Unhook successfully");
-                this.hookInvokerButton.Text = @"HOOK!";
-            }
+            var logger = new Logger(new Point(12, 170), new Size(483, 316));
+            this.Controls.Add(logger);
+//            if (hHook == 0)
+//            {
+//                hHook = SetWindowsHookEx(WH_MOUSE_LL, Proc, (IntPtr)0, 0);
+//
+//                if (hHook == 0)
+//                {
+//                    throw new Exception("SetWindowsHookEx Failed");
+//                }
+//
+//                this.hookInvokerButton.Text = @"UnHook!";
+//            }
+//            else
+//            {
+//                bool ret = UnhookWindowsHookEx(hHook);
+//                //If the UnhookWindowsHookEx function fails.
+//                if (ret == false)
+//                {
+//                    throw new Exception("UnhookWindowsHookEx Failed");
+//                }
+//
+//                hHook = 0;
+//                mouseEventPrinter.Items.Add("Unhook successfully");
+//                this.hookInvokerButton.Text = @"HOOK!";
+//            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -147,22 +115,6 @@
             LastEllapsedTime = 0;
             BypassedLButtonClicks = 0;
             LButtonClicks = 0;
-            mouseEventPrinter.Items.Clear();
-        }
-
-        private void resetStopWatchTimer_Tick(object sender, EventArgs e)
-        {
-            if (Stopwatch.ElapsedMilliseconds > MaxAllowedMilisecondsForStopwatch)
-            {
-                LastEllapsedTime = 0;
-                Stopwatch.Restart();
-            }
-        }
-
-        private static void ScrollToBottomListBox()
-        {
-            int visibleItems = mouseEventPrinter.ClientSize.Height / mouseEventPrinter.ItemHeight;
-            mouseEventPrinter.TopIndex = Math.Max(mouseEventPrinter.Items.Count - visibleItems + 1, 0);
         }
     }
 }

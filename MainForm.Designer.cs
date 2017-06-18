@@ -1,7 +1,17 @@
 ﻿namespace RazerDeathadderFix
 {
-    partial class MainForm
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
+    public partial class MainForm
     {
+        private System.Windows.Forms.Button hookInvokerButton;
+        private System.Windows.Forms.Button clearMouseEventPrinterButton;
+        private System.Windows.Forms.GroupBox settingsGroupBox;
+        private static System.Windows.Forms.CheckBox scrollBottomCheckBox;
+        private static System.Windows.Forms.Label lButtonLabel;
+        private static System.Windows.Forms.Label bypassedLButtonLabel;
+        private static System.Windows.Forms.Label allLButtonLabel;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -26,28 +36,19 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            mouseEventPrinter = new System.Windows.Forms.ListBox();
             this.hookInvokerButton = new System.Windows.Forms.Button();
             this.clearMouseEventPrinterButton = new System.Windows.Forms.Button();
             bypassedLButtonLabel = new System.Windows.Forms.Label();
             lButtonLabel = new System.Windows.Forms.Label();
             allLButtonLabel = new System.Windows.Forms.Label();
-            this.resetStopWatchTimer = new System.Windows.Forms.Timer(this.components);
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             scrollBottomCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // mouseEventPrinter
-            // 
-            mouseEventPrinter.FormattingEnabled = true;
-            mouseEventPrinter.Location = new System.Drawing.Point(12, 170);
-            mouseEventPrinter.Name = "mouseEventPrinter";
-            mouseEventPrinter.Size = new System.Drawing.Size(483, 316);
-            mouseEventPrinter.TabIndex = 0;
             // 
             // hookInvokerButton
             // 
@@ -96,11 +97,6 @@
             allLButtonLabel.TabIndex = 6;
             allLButtonLabel.Text = "All LButton: NaN";
             // 
-            // resetStopWatchTimer
-            // 
-            this.resetStopWatchTimer.Interval = 28000;
-            this.resetStopWatchTimer.Tick += new System.EventHandler(this.resetStopWatchTimer_Tick);
-            // 
             // settingsGroupBox
             // 
             this.settingsGroupBox.Controls.Add(scrollBottomCheckBox);
@@ -130,7 +126,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 511);
             this.Controls.Add(this.settingsGroupBox);
-            this.Controls.Add(mouseEventPrinter);
             this.Controls.Add(this.clearMouseEventPrinterButton);
             this.Controls.Add(this.hookInvokerButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -143,16 +138,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button hookInvokerButton;
-        private System.Windows.Forms.Button clearMouseEventPrinterButton;
-        private System.Windows.Forms.Timer resetStopWatchTimer;
-        private System.Windows.Forms.GroupBox settingsGroupBox;
-        private static System.Windows.Forms.CheckBox scrollBottomCheckBox;
-        private static System.Windows.Forms.Label lButtonLabel;
-        private static System.Windows.Forms.Label bypassedLButtonLabel;
-        private static System.Windows.Forms.Label allLButtonLabel;
-        private static System.Windows.Forms.ListBox mouseEventPrinter;
     }
 }
 
